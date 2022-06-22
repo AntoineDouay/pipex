@@ -6,7 +6,7 @@
 #    By: adouay <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/20 12:22:12 by adouay            #+#    #+#              #
-#    Updated: 2022/06/20 13:02:03 by adouay           ###   ########.fr        #
+#    Updated: 2022/06/22 19:11:35 by adouay           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,8 @@ NAME = pipex
 
 CC = gcc
 
-SRC = pipex.c
+SRC = pipex.c \
+	child.c
 
 OBJ = $(SRC:.c=.o)
 
