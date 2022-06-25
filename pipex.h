@@ -42,5 +42,7 @@ typedef struct s_pipex{
 
 void	create_child(t_pipex *pipex, char **envp);
 void	close_pipes(t_pipex *pipex);
+void	free_double_array(char **tab);
+
 
 #endif

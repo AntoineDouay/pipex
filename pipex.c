@@ -6,7 +6,7 @@
 /*   By: adouay <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/20 11:34:38 by adouay            #+#    #+#             */
-/*   Updated: 2022/06/22 20:02:07 by adouay           ###   ########.fr       */
+/*   Updated: 2022/06/25 19:31:38 by adouay           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	free_double_array(char **tab)
 		free (tab[i]);
 		i++;
 	}
+	free (tab[i]);
 	free (tab);
 	return ;
 }
@@ -80,14 +81,11 @@ void	create_pipes(t_pipex *pipex)
 	int	i;
 
 	i = 0;
-	pipex->pipe = malloc(sizeof(int ) * (2 * pipex->pipe_nbr));
-	printf("salut");
+	pipex->pipe = malloc(sizeof(int) * (2 * pipex->pipe_nbr));
 	while (i < pipex->pipe_nbr)
 	{
 		if (pipe(pipex->pipe + (2 * i)) < 0)
 			return ;  // ERROR
-		printf("%i\n", pipex->pipe[i]);
-		printf("%i\n", pipex->pipe[i + 1]);
 		i++;
 	}
 }
@@ -95,9 +93,6 @@ void	create_pipes(t_pipex *pipex)
 int	main(int ac, char **av, char **envp)
 {
 	t_pipex	pipex;
-
-//	char	*ls_option[3] = 	{"ls", "-l", NULL};
-//	char	*wc_option[3] = 	{"wc", "-l", NULL};
 
 	if (parse_args(ac, av))
 		return (0);
@@ -115,38 +110,10 @@ int	main(int ac, char **av, char **envp)
 	while (++(pipex.cmds_pos) < pipex.commands_nbr)
 		create_child(&pipex, envp);
 	close_pipes(&pipex);
-	/*
-	pipe(fd);
-
-	int	pid = fork();
-
-	if (pid == -1)
-		return (0);
-	if (pid == 0)
-	{
-		int	outfile_fd = open("test2.txt", O_WRONLY);
-		printf("child\n");
-		dup2(fd[0], 0);
-		dup2(outfile_fd, 1);
-		close(fd[1]);
-		close(fd[0]);
-		execve("/usr/bin/wc", wc_option, envp);
-	}
-	if (pid > 0)
-	{
-		int	infile_fd = open("test.txt", O_RDONLY);
-		printf("parent\n");
-		dup2(infile_fd, 0);
-		dup2(fd[1], 1);
-		close(fd[0]);
-		close(fd[1]);
-		execve("/usr/bin/ls", ls_option, envp);
-	} */
-//	char	*options[3] = 	{"ls", "-a", NULL};
-//	execve("/usr/bin/ls", options, envp);
-
-		//free (pipex.pipe);
-		//free_double_array(pipex.cmds);
-		//free_double_array(pipex.paths);
+	close(pipex.infile_fd);
+	close(pipex.outfile_fd);
+	free (pipex.pipe);
+	free (pipex.cmds);
+	free_double_array(pipex.paths);
 	return (0);
 }

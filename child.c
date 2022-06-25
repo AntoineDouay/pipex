@@ -6,7 +6,7 @@
 /*   By: adouay <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:06:22 by adouay            #+#    #+#             */
-/*   Updated: 2022/06/22 21:28:21 by adouay           ###   ########.fr       */
+/*   Updated: 2022/06/25 19:58:28 by adouay           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	close_pipes(t_pipex *pipex)
 char	*get_cmd_path(t_pipex *pipex)
 {
 	char	*tmp;
+	char	*cmd;
 	int	i;
 
 	i = 0;
@@ -41,14 +42,15 @@ char	*get_cmd_path(t_pipex *pipex)
 	while (pipex->paths[i] != 0)
 	{
 		tmp = ft_strjoin(pipex->paths[i], "/");
-		tmp = ft_strjoin(tmp, pipex->cmd_options[0]);
-		if(access(tmp, F_OK | R_OK) == 0)
-			return (tmp);
-		free (tmp);
+		cmd = ft_strjoin(tmp, pipex->cmd_options[0]);
+		free(tmp);
+		if(access(cmd, F_OK | R_OK) == 0)
+			return (cmd);
+		free(cmd);
 		i++;
 	}
-	tmp = NULL;
-	return (tmp);
+	cmd = NULL;
+	return (cmd);
 }
 
 void	create_child(t_pipex *pipex, char **envp)
@@ -65,6 +67,11 @@ void	create_child(t_pipex *pipex, char **envp)
 		close_pipes(pipex);
 		pipex->cmd_options = ft_split(pipex->cmds[pipex->cmds_pos], ' ');
 		pipex->cmd_path = get_cmd_path(pipex);
+		if (pipex->cmd_path == NULL)
+		{
+			free_double_array(pipex->cmd_options);
+			exit(1);// ERROR
+		}
 		execve(pipex->cmd_path, pipex->cmd_options, envp);		
 	}
 }

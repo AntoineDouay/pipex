@@ -1,6 +1,3 @@
-hhghghg
-hg
-h
-ggg
-g
-/mnt/nfs/homes/adouay/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+1
+lut/usr/bin/wc
+2
