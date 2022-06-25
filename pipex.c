@@ -75,6 +75,23 @@ void	free_double_array(char **tab)
 	return ;
 }
 
+void	create_pipes(t_pipex *pipex)
+{
+	int	i;
+
+	i = 0;
+	pipex->pipe = malloc(sizeof(int ) * (2 * pipex->pipe_nbr));
+	printf("salut");
+	while (i < pipex->pipe_nbr)
+	{
+		if (pipe(pipex->pipe + (2 * i)) < 0)
+			return ;  // ERROR
+		printf("%i\n", pipex->pipe[i]);
+		printf("%i\n", pipex->pipe[i + 1]);
+		i++;
+	}
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_pipex	pipex;
@@ -87,15 +104,17 @@ int	main(int ac, char **av, char **envp)
 	if (get_files(ac, av, &pipex))
 		return (0);
 	
-	pipex.ppid = getpid();
 	pipex.commands_nbr = ac - 3;
 	pipex.pipe_nbr = ac - 4;
-	pipex.pipe = malloc(sizeof(int) * (2 * pipex.pipe_nbr));
+	pipex.cmds_pos = -1;
 	if (get_commands(av, &pipex))
 		return (0);
 	pipex.path_line = path_finding(envp) + 5;
 	pipex.paths = ft_split(pipex.path_line, ':');
-	create_child(&pipex);
+	create_pipes(&pipex);
+	while (++(pipex.cmds_pos) < pipex.commands_nbr)
+		create_child(&pipex, envp);
+	close_pipes(&pipex);
 	/*
 	pipe(fd);
 
@@ -125,11 +144,9 @@ int	main(int ac, char **av, char **envp)
 	} */
 //	char	*options[3] = 	{"ls", "-a", NULL};
 //	execve("/usr/bin/ls", options, envp);
-	if(getpid() == pipex.ppid)
-	{
-		free (pipex.pipe);
-		free_double_array(pipex.cmds);
-		free_double_array(pipex.paths);
-	}
+
+		//free (pipex.pipe);
+		//free_double_array(pipex.cmds);
+		//free_double_array(pipex.paths);
 	return (0);
 }
