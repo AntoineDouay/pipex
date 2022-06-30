@@ -1,2 +1,3 @@
-/usr/bin/wc
+5
+sr/bin/wc
       16

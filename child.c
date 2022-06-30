@@ -6,7 +6,7 @@
 /*   By: adouay <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 19:06:22 by adouay            #+#    #+#             */
-/*   Updated: 2022/06/25 19:58:28 by adouay           ###   ########.fr       */
+/*   Updated: 2022/06/30 14:03:08 by adouay           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,11 @@ void	create_child(t_pipex *pipex, char **envp)
 		pipex->cmd_path = get_cmd_path(pipex);
 		if (pipex->cmd_path == NULL)
 		{
+			free (pipex->pipe);
+			free (pipex->cmds);
+			free_double_array(pipex->paths);
 			free_double_array(pipex->cmd_options);
-			exit(1);// ERROR
+			exit(0);// ERROR
 		}
 		execve(pipex->cmd_path, pipex->cmd_options, envp);		
 	}

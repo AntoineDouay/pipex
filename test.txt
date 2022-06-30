@@ -1,3 +1,9 @@
 1
-lut/usr/bin/wc
 2
+salut
+mon gars
+ca 
+va 
+la forme
+yeee
+
